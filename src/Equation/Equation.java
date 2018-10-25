@@ -1,9 +1,7 @@
 package Equation;
 
-import java.math.BigDecimal;
-
 /**
- * Equation given in task
+ * Equation given in task. Version 1 - uses double precision floating point arguments
  */
 public class Equation implements EquationInterface {
 

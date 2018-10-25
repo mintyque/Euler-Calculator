@@ -1,0 +1,104 @@
+package Euler;
+
+import Equation.*;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+
+public class EulerCalculatorBD {
+
+    // Step for Euler's method. 0.1 by default
+    private BigDecimal step = new BigDecimal(0.1);
+
+    /**
+     * Simple setter for step that will be used for computing.
+     *
+     * @param step - new step value
+     */
+    public void setStep(BigDecimal step) {
+        this.step = step;
+    }
+
+
+    // Initial values for Euler's method
+    private BigDecimal initialX;
+    private BigDecimal initialY;
+
+    private BigDecimal two = new BigDecimal(2);
+    private BigDecimal six = new BigDecimal(6);
+    private MathContext prec;
+
+    /**
+     * Constructor for EulerCalculator with initial values
+     *
+     * @param x - initial x
+     * @param y - initial y
+     */
+    public EulerCalculatorBD(BigDecimal x, BigDecimal y, MathContext prec) {
+        this.initialX = x;
+        this.initialY = y;
+        this.prec = prec;
+    }
+
+    /**
+     * Approximate the solution of a first order DE on range [x0, finalX] with Euler's method as follows:
+     * y1 = y0 + step * f(x0, y0)
+     *
+     * @param equation - equation we need to solve
+     * @param finalX - closes the range of X
+     */
+    public void euler(EquationInterfaceBD equation, BigDecimal finalX){
+        BigDecimal x = this.initialX;
+        BigDecimal y = this.initialY;
+
+        while(!x.equals(finalX.add(step, prec))){
+            System.out.println("" + x.doubleValue() + " " + y.doubleValue());
+            y = y.add(step.multiply(equation.compute(x, y)), prec);
+            x = x.add(step, prec);
+        }
+    }
+
+    /**
+     * Approximate the solution of a first order DE on range [x0, finalX] with improved Euler's method (Heun's method),
+     * using the following formula:
+     * intY = y0 + step * f(x0, y0)
+     * y1 = y0 + (f(x0, y0) + f(x0, intY))/2
+     *
+     * @param equation - equation we need to solve
+     * @param finalX - closes the range of X
+     */
+    public void heun(EquationInterfaceBD equation, BigDecimal finalX){
+        BigDecimal x = this.initialX;
+        BigDecimal y = this.initialY;
+        while(!x.equals(finalX.add(step, prec))){
+            System.out.println("" + x.doubleValue() + " " + y.doubleValue());
+            //yI = y + step * equation(x, y
+            //y = y + (equation(x, y) + equation(x + step, yI))*step/2
+            BigDecimal intermediateY = y.add(step.multiply(equation.compute(x, y)), prec);
+            y = y.add(equation.compute(x, y).add(equation.compute(x.add(step, prec), intermediateY)).divide(two, prec), prec);
+            x = x.add(step, prec);
+        }
+    }
+
+    /**
+     * Approximate the solution of a first order DE on range [x0, finalX] with Runge Kutta method.
+     *
+     */
+    public void rungeKutta(EquationInterfaceBD equation, BigDecimal finalX){
+        BigDecimal x = this.initialX;
+        BigDecimal y = this.initialY;
+
+        // Intermediate steps of algorithm
+        BigDecimal k1, k2, k3, k4;
+
+        while(!x.equals(finalX.add(step, prec))){
+            System.out.println("" + x.doubleValue() + " " + y.doubleValue());
+            k1 = step.multiply(equation.compute(x, y), prec);
+            k2 = step.multiply(equation.compute(x.add(step.divide(two, prec), prec), y.add(k1.divide(two, prec), prec)), prec);
+            k3 = step.multiply(equation.compute(x.add(step.divide(two)), y.add(k2.divide(two, prec), prec)), prec);
+            k4 = step.multiply(equation.compute(x.add(step, prec), y.add(k3, prec)), prec);
+            y = y.add(k1.add(k2.add(k3, prec).multiply(two, prec)).add(k4, prec).divide(six, prec), prec);
+            x = x.add(step, prec);
+        }
+    }
+}
