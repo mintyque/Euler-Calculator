@@ -5,6 +5,7 @@ import Euler.*;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -27,7 +28,7 @@ public class Main extends Application {
         //Setting up the equation
         EquationInterfaceBD equation = new EquationBD();
         MathContext prec = new MathContext(10);
-        EulerCalculatorBD euler = new EulerCalculatorBD(new BigDecimal(0), new BigDecimal(1), prec);
+        EulerCalculatorBD euler = new EulerCalculatorBD(new BigDecimal(0, prec), new BigDecimal(1, prec), prec);
 
         stage.setTitle("Approximating a DE");
         //defining the axes
@@ -37,8 +38,7 @@ public class Main extends Application {
         yAxis.setLabel("Y");
 
         //creating the chart
-        final LineChart<Number,Number> lineChart =
-                new LineChart<Number,Number>(xAxis,yAxis);
+        final LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
 
         lineChart.setTitle("Your equation");
 
@@ -53,14 +53,15 @@ public class Main extends Application {
         rungeGraph.setName("Runge Kutta");
 
         //populating the series with data
-        addData(eulerGraph.getData(), euler.euler(equation, new BigDecimal("9.000000000")));
-        addData(heunGraph.getData(), euler.heun(equation, new BigDecimal("9.000000000")));
-        addData(rungeGraph.getData(), euler.rungeKutta(equation, new BigDecimal("9.000000000")));
+        addData(eulerGraph.getData(), euler.euler(equation, new BigDecimal("9.300000000")));
+        addData(heunGraph.getData(), euler.heun(equation, new BigDecimal("9.300000000")));
+        addData(rungeGraph.getData(), euler.rungeKutta(equation, new BigDecimal("9.300000000")));
 
         Scene scene  = new Scene(lineChart,800,600);
         lineChart.getData().add(eulerGraph);
         lineChart.getData().add(heunGraph);
         lineChart.getData().add(rungeGraph);
+        scene.getStylesheets().add(getClass().getResource("linechart.css").toExternalForm());
 
         stage.setScene(scene);
         stage.show();

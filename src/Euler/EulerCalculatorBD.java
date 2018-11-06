@@ -54,7 +54,7 @@ public class EulerCalculatorBD {
 
         ArrayList<Point> toReturn = new ArrayList<>();
 
-        while(!x.equals(finalX.add(step, prec))){
+        while(x.compareTo(finalX) < 1){
             toReturn.add(new Point(x, y));
             y = y.add(step.multiply(equation.compute(x, y)), prec);
             x = x.add(step, prec);
@@ -78,13 +78,25 @@ public class EulerCalculatorBD {
 
         ArrayList<Point> toReturn = new ArrayList<>();
 
-        while(!x.equals(finalX.add(step, prec))){
+        while(x.compareTo(finalX) < 1){
             toReturn.add(new Point(x, y));
             //yI = y + step * equation(x, y
             //y = y + (equation(x, y) + equation(x + step, yI))*step/2
-            BigDecimal intermediateY = y.add(step.multiply(equation.compute(x, y)), prec);
-            y = y.add(equation.compute(x, y).add(equation.compute(x.add(step, prec), intermediateY)).divide(two, prec), prec);
+
+            //m1 = equation(x, y)
+            //m2 = equation(x+step, y + step*m1)
+            //y+ = y + h*(m1 + m2)/2
+            /*
+            BigDecimal m1 = equation.compute(x,y);
+            BigDecimal m2 = equation.compute(x.add(step, prec), y.add(step.multiply(m1, prec), prec));
+            y = y.add(step.multiply(m1.add(m2, prec), prec).divide(two, prec));
             x = x.add(step, prec);
+            */
+            BigDecimal intermediateY = y.add(step.multiply(equation.compute(x, y)), prec);
+            //yN = y + (f(x,y) + f(x+step, yI))/2
+            y = y.add(equation.compute(x, y).add(equation.compute(x.add(step, prec), intermediateY)).divide(two, prec).multiply(step, prec), prec);
+            x = x.add(step, prec);
+
         }
 
         return toReturn;
@@ -103,11 +115,11 @@ public class EulerCalculatorBD {
 
         ArrayList<Point> toReturn = new ArrayList<>();
 
-        while(!x.equals(finalX.add(step, prec))){
+        while(x.compareTo(finalX) < 1){
             toReturn.add(new Point(x, y));
             k1 = step.multiply(equation.compute(x, y), prec);
             k2 = step.multiply(equation.compute(x.add(step.divide(two, prec), prec), y.add(k1.divide(two, prec), prec)), prec);
-            k3 = step.multiply(equation.compute(x.add(step.divide(two)), y.add(k2.divide(two, prec), prec)), prec);
+            k3 = step.multiply(equation.compute(x.add(step.divide(two, prec)), y.add(k2.divide(two, prec), prec)), prec);
             k4 = step.multiply(equation.compute(x.add(step, prec), y.add(k3, prec)), prec);
             y = y.add(k1.add(k2.add(k3, prec).multiply(two, prec)).add(k4, prec).divide(six, prec), prec);
             x = x.add(step, prec);
