@@ -4,6 +4,7 @@ import Equation.*;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.ArrayList;
 
 public class EulerCalculatorBD {
 
@@ -47,15 +48,19 @@ public class EulerCalculatorBD {
      * @param equation - equation we need to solve
      * @param finalX - closes the range of X
      */
-    public void euler(EquationInterfaceBD equation, BigDecimal finalX){
+    public ArrayList<Point> euler(EquationInterfaceBD equation, BigDecimal finalX){
         BigDecimal x = this.initialX;
         BigDecimal y = this.initialY;
 
+        ArrayList<Point> toReturn = new ArrayList<>();
+
         while(!x.equals(finalX.add(step, prec))){
-            System.out.println("" + x.doubleValue() + " " + y.doubleValue());
+            toReturn.add(new Point(x, y));
             y = y.add(step.multiply(equation.compute(x, y)), prec);
             x = x.add(step, prec);
         }
+
+        return toReturn;
     }
 
     /**
@@ -67,32 +72,39 @@ public class EulerCalculatorBD {
      * @param equation - equation we need to solve
      * @param finalX - closes the range of X
      */
-    public void heun(EquationInterfaceBD equation, BigDecimal finalX){
+    public ArrayList<Point> heun(EquationInterfaceBD equation, BigDecimal finalX){
         BigDecimal x = this.initialX;
         BigDecimal y = this.initialY;
+
+        ArrayList<Point> toReturn = new ArrayList<>();
+
         while(!x.equals(finalX.add(step, prec))){
-            System.out.println("" + x.doubleValue() + " " + y.doubleValue());
+            toReturn.add(new Point(x, y));
             //yI = y + step * equation(x, y
             //y = y + (equation(x, y) + equation(x + step, yI))*step/2
             BigDecimal intermediateY = y.add(step.multiply(equation.compute(x, y)), prec);
             y = y.add(equation.compute(x, y).add(equation.compute(x.add(step, prec), intermediateY)).divide(two, prec), prec);
             x = x.add(step, prec);
         }
+
+        return toReturn;
     }
 
     /**
      * Approximate the solution of a first order DE on range [x0, finalX] with Runge Kutta method.
      *
      */
-    public void rungeKutta(EquationInterfaceBD equation, BigDecimal finalX){
+    public ArrayList<Point> rungeKutta(EquationInterfaceBD equation, BigDecimal finalX){
         BigDecimal x = this.initialX;
         BigDecimal y = this.initialY;
 
         // Intermediate steps of algorithm
         BigDecimal k1, k2, k3, k4;
 
+        ArrayList<Point> toReturn = new ArrayList<>();
+
         while(!x.equals(finalX.add(step, prec))){
-            System.out.println("" + x.doubleValue() + " " + y.doubleValue());
+            toReturn.add(new Point(x, y));
             k1 = step.multiply(equation.compute(x, y), prec);
             k2 = step.multiply(equation.compute(x.add(step.divide(two, prec), prec), y.add(k1.divide(two, prec), prec)), prec);
             k3 = step.multiply(equation.compute(x.add(step.divide(two)), y.add(k2.divide(two, prec), prec)), prec);
@@ -100,5 +112,6 @@ public class EulerCalculatorBD {
             y = y.add(k1.add(k2.add(k3, prec).multiply(two, prec)).add(k4, prec).divide(six, prec), prec);
             x = x.add(step, prec);
         }
+        return toReturn;
     }
 }
