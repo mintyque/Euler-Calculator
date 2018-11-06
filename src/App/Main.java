@@ -1,23 +1,30 @@
-package Main;
+package App;
 
-import Equation.*;
-import Euler.*;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-
-import java.lang.reflect.Array;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.ArrayList;
 
 public class Main extends Application {
 
+
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("euler.fxml"));
+        primaryStage.setTitle("DE Approximation");
+        primaryStage.setScene(new Scene(root, 640, 480));
+        primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+
+    /*
     private void addData(ObservableList dataList, ArrayList<Point> data){
         for (Point pointToAdd : data) {
             dataList.add(new XYChart.Data(pointToAdd.getX(), pointToAdd.getY()));
@@ -71,7 +78,6 @@ public class Main extends Application {
         launch(args);
     }
 
-    /*
     public static void main(String[] args) {
         EquationInterfaceBD equation = new EquationBD();
         MathContext prec = new MathContext(10);
