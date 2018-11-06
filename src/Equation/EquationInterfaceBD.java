@@ -7,4 +7,8 @@ import java.math.BigDecimal;
  */
 public interface EquationInterfaceBD {
     BigDecimal compute(BigDecimal x, BigDecimal y);
+
+    BigDecimal exact(BigDecimal x);
+
+    void setC(BigDecimal x, BigDecimal y);
 }

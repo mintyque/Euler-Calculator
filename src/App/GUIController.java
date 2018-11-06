@@ -35,25 +35,46 @@ public class GUIController {
     private boolean check() throws Exception{
         boolean checker = false;
         try{
-            new BigDecimal(stepText.getText());
+            if(new BigDecimal(stepText.getText()).compareTo(new BigDecimal(0)) < 1){
+                stepText.setText("More, pls");
+                checker = true;
+            }
         } catch(Exception exception){
             stepText.setText("Number, pls");
             checker = true;
         }
         try{
-            new BigDecimal(maxXText.getText());
+            if(new BigDecimal(maxXText.getText()).compareTo(new BigDecimal("100")) > -1){
+                maxXText.setText("Less, pls");
+                checker = true;
+            }
+            else if(new BigDecimal(maxXText.getText()).compareTo(new BigDecimal("-100")) < 1){
+                maxXText.setText("More, pls");
+            }
         } catch(Exception exception){
             maxXText.setText("Number, pls");
             checker = true;
         }
         try{
-            new BigDecimal(initialXText.getText());
+            if(new BigDecimal(initialXText.getText()).compareTo(new BigDecimal("100")) > -1){
+                initialXText.setText("Less, pls");
+                checker = true;
+            }
+            else if(new BigDecimal(initialXText.getText()).compareTo(new BigDecimal("-100")) < 1){
+                initialXText.setText("More, pls");
+            }
         } catch(Exception exception){
             initialXText.setText("Number, pls");
             checker = true;
         }
         try{
-            new BigDecimal(initialYText.getText());
+            if(new BigDecimal(initialYText.getText()).compareTo(new BigDecimal("100")) > -1){
+                initialYText.setText("Less, pls");
+                checker = true;
+            }
+            else if(new BigDecimal(initialYText.getText()).compareTo(new BigDecimal("-100")) < 1){
+                initialYText.setText("More, pls");
+            }
         } catch(Exception exception){
             initialYText.setText("Number, pls");
             checker = true;
@@ -85,6 +106,9 @@ public class GUIController {
         euler.setStep(step);
 
         //defining a series for Euler method
+        XYChart.Series exactGraph = new XYChart.Series();
+        exactGraph.setName("Exact solution");
+
         XYChart.Series eulerGraph = new XYChart.Series();
         eulerGraph.setName("Euler method");
 
@@ -93,6 +117,10 @@ public class GUIController {
 
         XYChart.Series rungeGraph = new XYChart.Series();
         rungeGraph.setName("Runge Kutta");
+
+
+        addData(exactGraph.getData(), euler.exact(equation, maxX));
+        chart.getData().add(exactGraph);
 
         if(eulerButton.isSelected()){
             addData(eulerGraph.getData(), euler.euler(equation, maxX));

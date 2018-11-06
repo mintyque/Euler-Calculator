@@ -8,7 +8,9 @@ import java.math.MathContext;
  */
 public class EquationBD implements EquationInterfaceBD {
 
-    private MathContext prec = new MathContext(5);
+    private MathContext prec = new MathContext(10);
+
+    private BigDecimal constant;
 
     /**
      * Method for computing an equation
@@ -20,5 +22,16 @@ public class EquationBD implements EquationInterfaceBD {
         double x1 = x.doubleValue();
         double y1 = x.doubleValue();
         return new BigDecimal(Math.exp(-Math.sin(x1)) - y1 * Math.cos(x1), prec);
+    }
+
+    public void setC(BigDecimal x, BigDecimal y){
+        double x1 = x.doubleValue();
+        double y1 = y.doubleValue();
+        constant = new BigDecimal(y1/Math.exp(-Math.sin(x1)) - x1);
+    }
+
+    public BigDecimal exact(BigDecimal x) {
+        double x1 = x.doubleValue();
+        return new BigDecimal((x1 + constant.doubleValue()) * Math.exp(-Math.sin(x1)));
     }
 }

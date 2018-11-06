@@ -41,6 +41,20 @@ public class EulerCalculatorBD {
         this.prec = prec;
     }
 
+    public ArrayList<Point> exact(EquationInterfaceBD equation, BigDecimal finalX){
+        BigDecimal x = this.initialX;
+        BigDecimal y = this.initialY;
+        ArrayList<Point> toReturn = new ArrayList<>();
+        equation.setC(x, y);
+
+        while(x.compareTo(finalX) < 1){
+            toReturn.add(new Point(x, equation.exact(x)));
+            x = x.add(step, prec);
+        }
+
+        return toReturn;
+    }
+
     /**
      * Approximate the solution of a first order DE on range [x0, finalX] with Euler's method as follows:
      * y1 = y0 + step * f(x0, y0)
@@ -82,18 +96,7 @@ public class EulerCalculatorBD {
             toReturn.add(new Point(x, y));
             //yI = y + step * equation(x, y
             //y = y + (equation(x, y) + equation(x + step, yI))*step/2
-
-            //m1 = equation(x, y)
-            //m2 = equation(x+step, y + step*m1)
-            //y+ = y + h*(m1 + m2)/2
-            /*
-            BigDecimal m1 = equation.compute(x,y);
-            BigDecimal m2 = equation.compute(x.add(step, prec), y.add(step.multiply(m1, prec), prec));
-            y = y.add(step.multiply(m1.add(m2, prec), prec).divide(two, prec));
-            x = x.add(step, prec);
-            */
             BigDecimal intermediateY = y.add(step.multiply(equation.compute(x, y)), prec);
-            //yN = y + (f(x,y) + f(x+step, yI))/2
             y = y.add(equation.compute(x, y).add(equation.compute(x.add(step, prec), intermediateY)).divide(two, prec).multiply(step, prec), prec);
             x = x.add(step, prec);
 
