@@ -24,12 +24,22 @@ public class EquationBD implements EquationInterfaceBD {
         return new BigDecimal(Math.exp(-Math.sin(x1)) - y1 * Math.cos(x1), prec);
     }
 
+    /**
+     * Method for computing a coefficient to provide an exact solution of an IVP
+     * @param x - x0
+     * @param y - y0
+     */
     public void setC(BigDecimal x, BigDecimal y){
         double x1 = x.doubleValue();
         double y1 = y.doubleValue();
         constant = new BigDecimal(y1/Math.exp(-Math.sin(x1)) - x1);
     }
 
+    /**
+     * Method for computing an exact solution of an IVP
+     * @param x - value of X
+     * @return BigDecimal representation of Y coordinate of a point
+     */
     public BigDecimal exact(BigDecimal x) {
         double x1 = x.doubleValue();
         return new BigDecimal((x1 + constant.doubleValue()) * Math.exp(-Math.sin(x1)));

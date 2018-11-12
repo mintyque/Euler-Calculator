@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 public class Point {
 
+    /**
+     * Simple class to hold coordinates of a point for the purpose of data encapsulation.
+     */
     private BigDecimal x;
     private BigDecimal y;
 
