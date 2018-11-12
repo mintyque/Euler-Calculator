@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<SplitPane fx:controller="App.GUIController" dividerPositions="0.7257318952234206" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="651.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <items>
+      <TabPane maxHeight="400.0" maxWidth="467.0" minHeight="400.0" minWidth="400.0" prefHeight="400.0" prefWidth="467.0" tabClosingPolicy="UNAVAILABLE" SplitPane.resizableWithParent="false">
+        <tabs>
+          <Tab text="Solution">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <LineChart createSymbols="false" fx:id="chart" prefHeight="365.0" prefWidth="452.0">
+                          <xAxis>
+                            <NumberAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Local Error">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <LineChart createSymbols="false" fx:id="localErrorChart" prefHeight="365.0" prefWidth="452.0">
+                          <xAxis>
+                            <NumberAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Global Error">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <LineChart createSymbols="false" fx:id ="globalErrorChart" prefHeight="365.0" prefWidth="452.0">
+                          <xAxis>
+                            <NumberAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                     </children>
+                  </AnchorPane>
+              </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <SplitPane orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+        <items>
+            <VBox fillWidth="false" prefHeight="200.0" prefWidth="100.0" spacing="7.0">
+               <children>
+                  <CheckBox fx:id="eulerButton" mnemonicParsing="false" text="Euler" />
+                  <CheckBox fx:id="heunButton" mnemonicParsing="false" text="Heun" />
+                  <CheckBox fx:id="rungeButton" mnemonicParsing="false" text="Runge Kutta" />
+                  <Label text="Step size" />
+                  <TextField fx:id="stepText">
+                     <VBox.margin>
+                        <Insets top="-5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Label text="Initial X" />
+                  <TextField fx:id="initialXText">
+                     <VBox.margin>
+                        <Insets top="-5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Label text="Initial Y" />
+                  <TextField fx:id="initialYText">
+                     <VBox.margin>
+                        <Insets top="-5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Label text="Maximum X" />
+                  <TextField fx:id="maxXText">
+                     <VBox.margin>
+                        <Insets top="-5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Button mnemonicParsing="false" onAction="#execute" prefHeight="25.0" prefWidth="174.0" text="Plot">
+                     <VBox.margin>
+                        <Insets right="10.0" />
+                     </VBox.margin>
+                  </Button>
+                  <TextArea fx:id="errorReport" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true">
+                     <VBox.margin>
+                        <Insets bottom="5.0" right="5.0" />
+                     </VBox.margin>
+                  </TextArea>
+               </children>
+               <padding>
+                  <Insets left="5.0" top="5.0" />
+               </padding>
+            </VBox>
+        </items>
+      </SplitPane>
+   </items>
+</SplitPane>

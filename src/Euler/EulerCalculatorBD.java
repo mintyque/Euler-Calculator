@@ -94,7 +94,7 @@ public class EulerCalculatorBD {
 
         while(x.compareTo(finalX) < 1){
             toReturn.add(new Point(x, y));
-            //yI = y + step * equation(x, y
+            //yI = y + step * equation(x, y)
             //y = y + (equation(x, y) + equation(x + step, yI))*step/2
             BigDecimal intermediateY = y.add(step.multiply(equation.compute(x, y)), prec);
             y = y.add(equation.compute(x, y).add(equation.compute(x.add(step, prec), intermediateY)).divide(two, prec).multiply(step, prec), prec);
