@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 /**
- * Equation given in task. Separate class for testing BigDecimal consistency
+ * Equation given in task
  */
 public class EquationBD implements EquationInterfaceBD {
 

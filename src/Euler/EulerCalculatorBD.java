@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 
+/**
+ * Calculator implementing Euler, Heun and Runge Kutta methods of approximation of a DE solution
+ */
 public class EulerCalculatorBD {
 
     // Step for Euler's method. 0.1 by default
@@ -30,7 +33,7 @@ public class EulerCalculatorBD {
     private MathContext prec;
 
     /**
-     * Constructor for EulerCalculator with initial values
+     * Constructor for EulerCalculatorBD with initial values
      *
      * @param x - initial x
      * @param y - initial y
@@ -41,6 +44,12 @@ public class EulerCalculatorBD {
         this.prec = prec;
     }
 
+    /**
+     * Provide an exact solution to DE
+     * @param equation - equation we need to solve
+     * @param finalX - closes the range of X
+     * @return ArrayList of Points of the graph
+     */
     public ArrayList<Point> exact(EquationInterfaceBD equation, BigDecimal finalX){
         BigDecimal x = this.initialX;
         BigDecimal y = this.initialY;
@@ -61,6 +70,7 @@ public class EulerCalculatorBD {
      *
      * @param equation - equation we need to solve
      * @param finalX - closes the range of X
+     * @return ArrayList of Points of the graph
      */
     public ArrayList<Point> euler(EquationInterfaceBD equation, BigDecimal finalX){
         BigDecimal x = this.initialX;
@@ -85,6 +95,7 @@ public class EulerCalculatorBD {
      *
      * @param equation - equation we need to solve
      * @param finalX - closes the range of X
+     * @return ArrayList of Points of the graph
      */
     public ArrayList<Point> heun(EquationInterfaceBD equation, BigDecimal finalX){
         BigDecimal x = this.initialX;
@@ -107,7 +118,9 @@ public class EulerCalculatorBD {
 
     /**
      * Approximate the solution of a first order DE on range [x0, finalX] with Runge Kutta method.
-     *
+     * @param equation - equation we need to solve
+     * @param finalX - closes the range of X
+     * @return ArrayList of Points of the graph
      */
     public ArrayList<Point> rungeKutta(EquationInterfaceBD equation, BigDecimal finalX){
         BigDecimal x = this.initialX;
