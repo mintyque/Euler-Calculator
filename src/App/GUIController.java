@@ -65,7 +65,7 @@ public class GUIController {
         boolean checker = false;
         String errors = new String();
         try{
-            if(new BigDecimal(stepText.getText()).compareTo(new BigDecimal(0)) < 1){
+            if(Double.parseDouble(stepText.getText()) < 0){
                 errors += "Step can't be negative\n";
                 checker = true;
             }
@@ -74,7 +74,7 @@ public class GUIController {
             checker = true;
         }
         try{
-            if(new BigDecimal(maxXText.getText()).compareTo(new BigDecimal("100")) > -1 || new BigDecimal(maxXText.getText()).compareTo(new BigDecimal("-100")) < 1) {
+            if(Double.parseDouble(maxXText.getText()) < -100 || Double.parseDouble(maxXText.getText()) > 100) {
                 errors += "Maximum X = (-100; 100)\n";
                 checker = true;
             }
@@ -83,7 +83,7 @@ public class GUIController {
             checker = true;
         }
         try{
-            if(new BigDecimal(initialXText.getText()).compareTo(new BigDecimal("100")) > -1 || new BigDecimal(initialXText.getText()).compareTo(new BigDecimal("-100")) < 1){
+            if(Double.parseDouble(initialXText.getText()) < -100 || Double.parseDouble(initialXText.getText()) > 100){
                 errors += "Initial X = (-100;100)\n";
                 checker = true;
             }
@@ -92,7 +92,7 @@ public class GUIController {
             checker = true;
         }
         try{
-            if(new BigDecimal(initialYText.getText()).compareTo(new BigDecimal("100")) > -1 || new BigDecimal(initialYText.getText()).compareTo(new BigDecimal("-100")) < 1){
+            if(Double.parseDouble(initialYText.getText()) < -100 || Double.parseDouble(initialYText.getText()) > 100){
                 errors += ("Initial Y = (-100;100)\n");
                 checker = true;
             }
@@ -116,7 +116,7 @@ public class GUIController {
         boolean checker = false;
         String msg = new String();
         try{
-            if(new BigDecimal(initialNText.getText()).compareTo(new BigDecimal(maxNText.getText())) > -1){
+            if(Double.parseDouble(initialNText.getText()) > Double.parseDouble(maxNText.getText())){
                 checker = true;
                 msg += "Minimum N should be less than maximum N\n";
             }
@@ -147,7 +147,7 @@ public class GUIController {
      */
     private void calculateError(ArrayList<Point> exact, ArrayList<Point> approx, ObservableList error){
         for(int i = 0; i < exact.size(); i++){
-            double errorValue = Math.abs(exact.get(i).getY().subtract(approx.get(i).getY()).doubleValue());
+            double errorValue = Math.abs(exact.get(i).getY() - approx.get(i).getY());
             error.add(new XYChart.Data(exact.get(i).getX(), Math.abs(errorValue)));
         }
     }
@@ -161,8 +161,8 @@ public class GUIController {
     private ArrayList<Point> calculateError(ArrayList<Point> exact, ArrayList<Point> approx){
         ArrayList<Point> errorValues = new ArrayList<>();
         for(int i = 0; i < exact.size(); i++){
-            double errorValue = Math.abs(exact.get(i).getY().subtract(approx.get(i).getY()).doubleValue());
-            errorValues.add(new Point(exact.get(i).getX(), new BigDecimal(Math.abs(errorValue))));
+            double errorValue = Math.abs(exact.get(i).getY() - approx.get(i).getY());
+            errorValues.add(new Point(exact.get(i).getX(), Math.abs(errorValue)));
         }
         return errorValues;
     }
@@ -172,8 +172,8 @@ public class GUIController {
      * @param errorValues
      * @return BigDecimal maximum error
      */
-    private BigDecimal findMaxError(ArrayList<Point> errorValues){
-        BigDecimal maxError = BigDecimal.ZERO;
+    private double findMaxError(ArrayList<Point> errorValues){
+        double maxError = 0;
         for(Point point : errorValues){
             if(maxError.compareTo(point.getY()) < 0){
                 maxError = point.getY();
