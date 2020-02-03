@@ -173,9 +173,9 @@ public class GUIController {
      * @return BigDecimal maximum error
      */
     private double findMaxError(ArrayList<Point> errorValues){
-        double maxError = 0;
+        double maxError = -1;
         for(Point point : errorValues){
-            if(maxError.compareTo(point.getY()) < 0){
+            if(maxError > point.getY()){
                 maxError = point.getY();
             }
         }
@@ -190,17 +190,15 @@ public class GUIController {
         chart.getData().clear();
         localErrorChart.getData().clear();
 
-        MathContext prec = new MathContext(10);
-
         //Get all constants from text fields
-        BigDecimal step = new BigDecimal(stepText.getText());
-        BigDecimal maxX = new BigDecimal(maxXText.getText(), prec);
-        BigDecimal initialX = new BigDecimal(initialXText.getText(), prec);
-        BigDecimal initialY = new BigDecimal(initialYText.getText(), prec);
+        double step = Double.parseDouble(stepText.getText());
+        double maxX = Double.parseDouble(maxXText.getText());
+        double initialX = Double.parseDouble(initialXText.getText());
+        double initialY = Double.parseDouble(initialYText.getText());
 
         //Setting up the equation
         EquationInterfaceBD equation = new EquationBD();
-        EulerCalculatorBD euler = new EulerCalculatorBD(initialX, initialY, prec);
+        EulerCalculatorBD euler = new EulerCalculatorBD(initialX, initialY);
         euler.setStep(step);
 
         //defining a series for Euler method
@@ -268,24 +266,22 @@ public class GUIController {
         //Clear all previous data
         globalErrorChart.getData().clear();
 
-        MathContext prec = new MathContext(10);
-
         //Get all constants from text fields
-        BigDecimal maxX = new BigDecimal(maxXText.getText(), prec);
-        BigDecimal initialX = new BigDecimal(initialXText.getText(), prec);
-        BigDecimal initialY = new BigDecimal(initialYText.getText(), prec);
+        double maxX = Double.parseDouble(maxXText.getText());
+        double initialX = Double.parseDouble(initialXText.getText());
+        double initialY = Double.parseDouble(initialYText.getText());
         int initialN = Integer.parseInt(initialNText.getText());
         int maxN = Integer.parseInt(maxNText.getText());
 
         //Setting up the equation
         EquationInterfaceBD equation = new EquationBD();
-        EulerCalculatorBD euler = new EulerCalculatorBD(initialX, initialY, prec);
+        EulerCalculatorBD euler = new EulerCalculatorBD(initialX, initialY);
 
         if(eulerButton.isSelected()){
             XYChart.Series eulerError = new XYChart.Series();
             eulerError.setName("Euler method");
             for(int step = initialN; step < maxN; step++){
-                BigDecimal newStep = maxX.subtract(initialX).divide(new BigDecimal(step, prec), prec);
+                double newStep = (maxX - initialX) / step;
                 euler.setStep(newStep);
                 ArrayList<Point> exact = euler.exact(equation, maxX);
                 ArrayList<Point> eulerMethod = euler.euler(equation, maxX);
@@ -298,7 +294,7 @@ public class GUIController {
             XYChart.Series heunError = new XYChart.Series();
             heunError.setName("Heun method");
             for(int step = initialN; step < maxN; step++){
-                BigDecimal newStep = maxX.subtract(initialX).divide(new BigDecimal(step, prec), prec);
+                double newStep = (maxX - initialX) / step;
                 euler.setStep(newStep);
                 ArrayList<Point> exact = euler.exact(equation, maxX);
                 ArrayList<Point> heunMethod = euler.heun(equation, maxX);
@@ -311,7 +307,7 @@ public class GUIController {
             XYChart.Series rungeError = new XYChart.Series();
             rungeError.setName("Runge Kutta");
             for(int step = initialN; step < maxN; step++){
-                BigDecimal newStep = maxX.subtract(initialX).divide(new BigDecimal(step, prec), prec);
+                double newStep = (maxX - initialX) / step;
                 euler.setStep(newStep);
                 ArrayList<Point> exact = euler.exact(equation, maxX);
                 ArrayList<Point> rungeMethod = euler.rungeKutta(equation, maxX);
