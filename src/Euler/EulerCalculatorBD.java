@@ -133,11 +133,21 @@ public class EulerCalculatorBD {
 
         while(x.compareTo(finalX) < 1){
             toReturn.add(new Point(x, y));
-            k1 = step.multiply(equation.compute(x, y), prec);
-            k2 = step.multiply(equation.compute(x.add(step.divide(two, prec), prec), y.add(k1.divide(two, prec), prec)), prec);
-            k3 = step.multiply(equation.compute(x.add(step.divide(two, prec)), y.add(k2.divide(two, prec), prec)), prec);
-            k4 = step.multiply(equation.compute(x.add(step, prec), y.add(k3, prec)), prec);
-            y = y.add(k1.add(k2.add(k3, prec).multiply(two, prec)).add(k4, prec).divide(six, prec), prec);
+            k1 = step.multiply(equation.compute(x, y));
+            BigDecimal halfK1 = k1.divide(two, prec);
+            BigDecimal halfStep = step.divide(two, prec);
+            BigDecimal xInt = x.add(halfStep);
+            k2 = step.multiply(equation.compute(xInt, y.add(halfK1)));
+            BigDecimal halfK2 = k2.divide(two, prec);
+            k3 = step.multiply(equation.compute(xInt, y.add(halfK2)));
+            xInt = x.add(step);
+            k4 = step.multiply(equation.compute(xInt, y.add(k3)));
+            BigDecimal k = k2.add(k3);
+            k = k.multiply(two);
+            k = k.add(k1);
+            k = k.add(k4);
+            k = k.divide(six, prec);
+            y = y.add(k);
             x = x.add(step, prec);
         }
         return toReturn;
