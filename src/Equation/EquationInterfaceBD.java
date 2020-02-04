@@ -6,9 +6,9 @@ import java.math.BigDecimal;
  * Interface for creating equations to plug into Euler's method using BigDecimal args
  */
 public interface EquationInterfaceBD {
-    BigDecimal compute(BigDecimal x, BigDecimal y);
+    double compute(double x, double y);
 
-    BigDecimal exact(BigDecimal x);
+    double exact(double x);
 
-    void setC(BigDecimal x, BigDecimal y);
+    void setC(double x, double y);
 }

@@ -2,8 +2,6 @@ package Euler;
 
 import Equation.*;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 
 /**
@@ -12,25 +10,21 @@ import java.util.ArrayList;
 public class EulerCalculatorBD {
 
     // Step for Euler's method. 0.1 by default
-    private BigDecimal step = new BigDecimal(0.1);
+    private double step = 0.1;
 
     /**
      * Simple setter for step that will be used for computing.
      *
      * @param step - new step value
      */
-    public void setStep(BigDecimal step) {
+    public void setStep(double step) {
         this.step = step;
     }
 
 
     // Initial values for Euler's method
-    private BigDecimal initialX;
-    private BigDecimal initialY;
-
-    private BigDecimal two = new BigDecimal(2);
-    private BigDecimal six = new BigDecimal(6);
-    private MathContext prec;
+    private double initialX;
+    private double initialY;
 
     /**
      * Constructor for EulerCalculatorBD with initial values
@@ -38,10 +32,9 @@ public class EulerCalculatorBD {
      * @param x - initial x
      * @param y - initial y
      */
-    public EulerCalculatorBD(BigDecimal x, BigDecimal y, MathContext prec) {
+    public EulerCalculatorBD(double x, double y) {
         this.initialX = x;
         this.initialY = y;
-        this.prec = prec;
     }
 
     /**
@@ -50,15 +43,15 @@ public class EulerCalculatorBD {
      * @param finalX - closes the range of X
      * @return ArrayList of Points of the graph
      */
-    public ArrayList<Point> exact(EquationInterfaceBD equation, BigDecimal finalX){
-        BigDecimal x = this.initialX;
-        BigDecimal y = this.initialY;
+    public ArrayList<Point> exact(EquationInterfaceBD equation, double finalX){
+        double x = this.initialX;
+        double y = this.initialY;
         ArrayList<Point> toReturn = new ArrayList<>();
         equation.setC(x, y);
 
-        while(x.compareTo(finalX) < 1){
+        while(x <= finalX){
             toReturn.add(new Point(x, equation.exact(x)));
-            x = x.add(step, prec);
+            x += step;
         }
 
         return toReturn;
@@ -72,16 +65,16 @@ public class EulerCalculatorBD {
      * @param finalX - closes the range of X
      * @return ArrayList of Points of the graph
      */
-    public ArrayList<Point> euler(EquationInterfaceBD equation, BigDecimal finalX){
-        BigDecimal x = this.initialX;
-        BigDecimal y = this.initialY;
+    public ArrayList<Point> euler(EquationInterfaceBD equation, double finalX){
+        double x = this.initialX;
+        double y = this.initialY;
 
         ArrayList<Point> toReturn = new ArrayList<>();
 
-        while(x.compareTo(finalX) < 1){
+        while(x <= finalX){
             toReturn.add(new Point(x, y));
-            y = y.add(step.multiply(equation.compute(x, y)), prec);
-            x = x.add(step, prec);
+            y = y + step * equation.compute(x, y);
+            x += step;
         }
 
         return toReturn;
@@ -97,20 +90,17 @@ public class EulerCalculatorBD {
      * @param finalX - closes the range of X
      * @return ArrayList of Points of the graph
      */
-    public ArrayList<Point> heun(EquationInterfaceBD equation, BigDecimal finalX){
-        BigDecimal x = this.initialX;
-        BigDecimal y = this.initialY;
+    public ArrayList<Point> heun(EquationInterfaceBD equation, double finalX){
+        double x = this.initialX;
+        double y = this.initialY;
 
         ArrayList<Point> toReturn = new ArrayList<>();
 
-        while(x.compareTo(finalX) < 1){
+        while(x <= finalX){
             toReturn.add(new Point(x, y));
-            //yI = y + step * equation(x, y)
-            //y = y + (equation(x, y) + equation(x + step, yI))*step/2
-            BigDecimal intermediateY = y.add(step.multiply(equation.compute(x, y)), prec);
-            y = y.add(equation.compute(x, y).add(equation.compute(x.add(step, prec), intermediateY)).divide(two, prec).multiply(step, prec), prec);
-            x = x.add(step, prec);
-
+            double intermediateY = y + step * equation.compute(x, y);
+            y = y + ((equation.compute(x, y)) + equation.compute(x + step, intermediateY)) * step / 2;
+            x += step;
         }
 
         return toReturn;
@@ -122,23 +112,21 @@ public class EulerCalculatorBD {
      * @param finalX - closes the range of X
      * @return ArrayList of Points of the graph
      */
-    public ArrayList<Point> rungeKutta(EquationInterfaceBD equation, BigDecimal finalX){
-        BigDecimal x = this.initialX;
-        BigDecimal y = this.initialY;
-
-        // Intermediate steps of algorithm
-        BigDecimal k1, k2, k3, k4;
+    public ArrayList<Point> rungeKutta(EquationInterfaceBD equation, double finalX){
+        double x = this.initialX;
+        double y = this.initialY;
+        double k1, k2, k3, k4;
 
         ArrayList<Point> toReturn = new ArrayList<>();
 
-        while(x.compareTo(finalX) < 1){
+        while(x <= finalX){
             toReturn.add(new Point(x, y));
-            k1 = step.multiply(equation.compute(x, y), prec);
-            k2 = step.multiply(equation.compute(x.add(step.divide(two, prec), prec), y.add(k1.divide(two, prec), prec)), prec);
-            k3 = step.multiply(equation.compute(x.add(step.divide(two, prec)), y.add(k2.divide(two, prec), prec)), prec);
-            k4 = step.multiply(equation.compute(x.add(step, prec), y.add(k3, prec)), prec);
-            y = y.add(k1.add(k2.add(k3, prec).multiply(two, prec)).add(k4, prec).divide(six, prec), prec);
-            x = x.add(step, prec);
+            k1 = step * equation.compute(x, y);
+            k2 = step * equation.compute(x + step/2, y + k1/2);
+            k3 = step * equation.compute(x + step/2, y + k2/2);
+            k4 = step * equation.compute(x + step, y + k3);
+            y = y + (k1 + 2*k2 + 2*k3 + k4)/6;
+            x += step;
         }
         return toReturn;
     }

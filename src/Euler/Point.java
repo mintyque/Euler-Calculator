@@ -6,19 +6,19 @@ import java.math.BigDecimal;
  * Simple class to hold coordinates of a point for the purpose of data encapsulation.
  */
 public class Point {
-    private BigDecimal x;
-    private BigDecimal y;
+    private double x;
+    private double y;
 
-    public Point(BigDecimal x, BigDecimal y) {
+    public Point(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public BigDecimal getX() {
+    public double getX() {
         return x;
     }
 
-    public BigDecimal getY() {
+    public double getY() {
         return y;
     }
 }
