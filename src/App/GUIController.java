@@ -65,8 +65,8 @@ public class GUIController {
         boolean checker = false;
         String errors = new String();
         try{
-            if(Double.parseDouble(stepText.getText()) < 0){
-                errors += "Step can't be negative\n";
+            if(Double.parseDouble(stepText.getText()) <= 0){
+                errors += "Step can't be negative or zero\n";
                 checker = true;
             }
         } catch(Exception exception){
@@ -175,7 +175,7 @@ public class GUIController {
     private double findMaxError(ArrayList<Point> errorValues){
         double maxError = -1;
         for(Point point : errorValues){
-            if(maxError > point.getY()){
+            if(maxError < point.getY()){
                 maxError = point.getY();
             }
         }

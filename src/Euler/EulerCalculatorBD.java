@@ -98,8 +98,6 @@ public class EulerCalculatorBD {
 
         while(x <= finalX){
             toReturn.add(new Point(x, y));
-            //yI = y + step * equation(x, y)
-            //y = y + (equation(x, y) + equation(x + step, yI))*step/2
             double intermediateY = y + step * equation.compute(x, y);
             y = y + ((equation.compute(x, y)) + equation.compute(x + step, intermediateY)) * step / 2;
             x += step;
@@ -117,8 +115,6 @@ public class EulerCalculatorBD {
     public ArrayList<Point> rungeKutta(EquationInterfaceBD equation, double finalX){
         double x = this.initialX;
         double y = this.initialY;
-
-        // Intermediate steps of algorithm
         double k1, k2, k3, k4;
 
         ArrayList<Point> toReturn = new ArrayList<>();
@@ -128,7 +124,7 @@ public class EulerCalculatorBD {
             k1 = step * equation.compute(x, y);
             k2 = step * equation.compute(x + step/2, y + k1/2);
             k3 = step * equation.compute(x + step/2, y + k2/2);
-            k4 = step * equation.compute(x + step, y + k3/2);
+            k4 = step * equation.compute(x + step, y + k3);
             y = y + (k1 + 2*k2 + 2*k3 + k4)/6;
             x += step;
         }
